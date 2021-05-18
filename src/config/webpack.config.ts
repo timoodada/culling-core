@@ -6,20 +6,12 @@ import { DefinePlugin } from 'webpack';
 import InterpolateHtmlPlugin from 'react-dev-utils/InterpolateHtmlPlugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
-import { synchronize, watching } from '../plugins/synchronize';
 import paths from './path';
 import { environments } from './environment';
+import { tryRead } from './culling';
 
 const { ModuleFederationPlugin } = container;
-const tryRead = (prop: string) => {
-  try {
-    return require(paths.cullingConfig)[prop];
-  } catch (err) {
-    return {};
-  }
-};
 
-const customEnv = tryRead('environments');
 const customAlias = tryRead('alias');
 
 const hasJsxRuntime = (() => {
@@ -34,22 +26,19 @@ const hasJsxRuntime = (() => {
   }
 })();
 export default () => {
-  const env: any = Object.assign({}, environments);
-  Object.assign(env, customEnv);
-  const isProduction = env.NODE_ENV === 'production';
-  isProduction ? synchronize() : watching();
+  const isProduction = environments.NODE_ENV === 'production';
   return {
     entry: paths.entryPath,
-    mode: env.NODE_ENV,
+    mode: environments.NODE_ENV,
     devServer: {
       contentBase: paths.outputPath,
-      port: env.PORT,
+      port: environments.PORT,
       hot: true,
       historyApiFallback: true,
     },
     output: {
       path: paths.outputPath,
-      publicPath: env.PUBLIC_URL,
+      publicPath: environments.PUBLIC_URL,
       filename: isProduction ?
         'static/js/[name].[contenthash:8].js' :
         'static/js/bundle.js',
@@ -128,6 +117,12 @@ export default () => {
             loader: 'sass-loader',
           }],
         },
+        {
+          test: /routes\.js/i,
+          use: [{
+            loader: require.resolve('../loaders/routes.js'),
+          }],
+        },
       ],
     },
     plugins: [
@@ -147,12 +142,12 @@ export default () => {
       }),
       isProduction && new CleanWebpackPlugin(),
       new DefinePlugin({
-        'progress.env': Object.keys(env).reduce<any>((previous, key) => {
-          previous[key] = JSON.stringify(env[key]);
+        'process.env': Object.keys(environments).reduce<any>((previous, key) => {
+          previous[key] = JSON.stringify(environments[key]);
           return previous;
         }, {}),
       }),
-      new InterpolateHtmlPlugin(HtmlWebpackPlugin, Object.assign({}, env, { PUBLIC_URL: env.PUBLIC_URL.replace(/\/$/, '') })),
+      new InterpolateHtmlPlugin(HtmlWebpackPlugin, Object.assign({}, environments, { PUBLIC_URL: environments.PUBLIC_URL.replace(/\/$/, '') })),
       new CopyPlugin({
         patterns: [
           {

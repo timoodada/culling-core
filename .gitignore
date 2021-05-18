@@ -10,7 +10,7 @@
 /coverage
 
 # production
-/dist
+/lib
 
 # temp
 /src/.temp

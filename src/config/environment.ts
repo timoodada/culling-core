@@ -1,3 +1,5 @@
+import { tryRead } from './culling';
+
 export function argvParser() {
   const argv = process.argv.reduce<any[]>((previous, current) => {
     if (current.indexOf('--') === 0) {
@@ -28,4 +30,4 @@ function loadEnv() {
   };
 }
 
-export const environments = loadEnv();
+export const environments = Object.assign({}, loadEnv(), tryRead('environments'));
