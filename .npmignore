@@ -1,0 +1,8 @@
+/dist
+/node_modules
+.idea
+.git
+tsconfig.json
+/src
+.eslintignore
+.eslintrc

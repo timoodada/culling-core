@@ -1,0 +1,42 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "ignorePatterns": ["lib", "dist"],
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "semi": "error",
+    "object-curly-spacing": ["error", "always"],
+    "no-console": "warn",
+    "quotes": ["error", "single"],
+    "indent": ["error", 2],
+    "keyword-spacing": "error",
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "camelcase": ["error", {
+      "properties": "never"
+    }],
+    "space-infix-ops": "error",
+    "comma-dangle": ["error", "always-multiline"],
+    "key-spacing": ["error", {
+      "beforeColon": false,
+      "afterColon": true
+    }],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "prefer-const": "error",
+    "no-unused-vars": ["error", {
+      "varsIgnorePattern": "^h$"
+    }]
+  }
+}
