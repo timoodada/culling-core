@@ -15,14 +15,11 @@
     "moduleResolution": "node",
     "declaration": true,
     "resolveJsonModule": true,
+    "jsx": "react-jsx",
     "experimentalDecorators": true,
     "outDir": "./lib"
   },
   "include": [
     "src"
-  ],
-  "baseUrl": ".",
-  "paths": {
-    "@/*": ["src/*"]
-  }
+  ]
 }

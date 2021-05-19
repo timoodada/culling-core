@@ -1,6 +1,6 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { container } from 'webpack';
-import path from 'path';
+import { resolve } from 'path';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { DefinePlugin } from 'webpack';
 import InterpolateHtmlPlugin from 'react-dev-utils/InterpolateHtmlPlugin';
@@ -13,6 +13,26 @@ import { tryRead } from './culling';
 const { ModuleFederationPlugin } = container;
 
 const customAlias = tryRead('alias');
+/**
+ * @example
+ * {
+      name: 'app',
+      filename: 'appEntry.js',
+      remotes: {
+        app2: 'app2@http://localhost/app2Entry.js',
+      },
+      exposes: {
+        './App': './src/App.tsx',
+      },
+      shared: {
+        'axios': { requiredVersion: '^0.21.1' },
+        'react': { requiredVersion: '^17.0.2' },
+        'react-dom': { requiredVersion: '^17.0.2' },
+        'react-router-dom': { requiredVersion: '^5.2.0' },
+      },
+    }
+* */
+const moduleFederationPlugin = tryRead('moduleFederationPlugin', {});
 
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
@@ -120,22 +140,15 @@ export default () => {
         {
           test: /routes\.js/i,
           use: [{
-            loader: require.resolve('../loaders/routes.js'),
+            loader: require.resolve(
+              resolve(__dirname, '../loaders/routes.js'),
+            ),
           }],
         },
       ],
     },
     plugins: [
-      new ModuleFederationPlugin({
-        name: 'root-container',
-        remotes: {},
-        shared: {
-          'axios': { singleton: true },
-          'react': { singleton: true },
-          'react-dom': { singleton: true },
-          'react-router-dom': { singleton: true },
-        },
-      }),
+      new ModuleFederationPlugin(moduleFederationPlugin),
       new HtmlWebpackPlugin({
         template: paths.templatePath,
         inject: true,
@@ -169,7 +182,7 @@ export default () => {
         failOnError: isProduction,
         context: paths.srcPath,
         cache: true,
-        cacheLocation: path.resolve(
+        cacheLocation: resolve(
           process.cwd(),
           './node_modules/.cache/.eslintcache',
         ),

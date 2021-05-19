@@ -1,14 +1,16 @@
 {
   "name": "@culling/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
-  "main": "lib/routes.js",
+  "main": "lib/index.js",
   "bin": {
     "culling": "lib/script.js"
   },
   "scripts": {
     "develop": "tsc -w",
-    "build": "tsc",
+    "build": "node build.js",
+    "pack": "npm pack",
+    "clean": "rm -rf lib",
     "lint": "eslint \"src/**\""
   },
   "author": "chenjiyuan.123@qq.com",
@@ -23,6 +25,7 @@
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
     "@culling/remark-loader": "1.0.6",
+    "@primer/css": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
     "babel-eslint": "^10.1.0",
@@ -43,6 +46,7 @@
     "express": "^4.17.1",
     "file-loader": "^6.2.0",
     "glob": "^7.1.7",
+    "hast-util-to-html": "^8.0.0",
     "html-webpack-plugin": "^5.3.1",
     "postcss": "^8.2.15",
     "postcss-loader": "^5.3.0",
@@ -60,8 +64,10 @@
   "devDependencies": {
     "@types/copy-webpack-plugin": "^8.0.0",
     "@types/fs-extra": "^9.0.11",
+    "@types/react": "^17.0.6",
     "@types/react-dev-utils": "^9.0.6",
     "@types/stringify-object": "^3.3.0",
-    "@types/webpack-dev-middleware": "^4.2.0"
+    "@types/webpack-dev-middleware": "^4.2.0",
+    "fs-extra": "^10.0.0"
   }
 }
