@@ -1,9 +1,16 @@
 import React, { FC, useMemo } from 'react';
 import { toHtml } from 'hast-util-to-html';
+import { Node as HNode } from 'hast-util-to-html/lib/types';
 import './style.scss';
 
+export interface Front {
+  [prop: string]: string | number | boolean;
+}
 interface MdWrapperProps {
-  data: { hast: any; front: any; };
+  data: {
+    hast: HNode | HNode[];
+    front: Front;
+  };
 }
 
 export const MdWrapper: FC<MdWrapperProps> = (props) => {
