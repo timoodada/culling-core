@@ -30,4 +30,4 @@ function loadEnv() {
   };
 }
 
-export const environments = Object.assign({}, loadEnv(), tryRead('environments'));
+export const environments = Object.assign({}, loadEnv(), tryRead('environments', {}));

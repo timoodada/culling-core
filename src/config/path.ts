@@ -1,10 +1,15 @@
 import { resolve } from 'path';
+import { tryRead } from './culling';
 
-export default {
-  srcPath: resolve(process.cwd(), './src'),
-  publicDir: resolve(process.cwd(), './public'),
-  templatePath: resolve(process.cwd(), './public/index.html'),
+const entryPath = tryRead('entryPath', './src/index') as string;
+const publicDir = tryRead('publicDir', resolve(process.cwd(), './public')) as string;
+const srcPath = tryRead('srcPath', resolve(process.cwd(), './src')) as string;
+
+const paths = {
+  srcPath,
+  publicDir,
   outputPath: resolve(process.cwd(), './dist'),
-  cullingConfig: resolve(process.cwd(), './culling.config.js'),
-  entryPath: './src/index',
+  entryPath,
 };
+
+export default paths;

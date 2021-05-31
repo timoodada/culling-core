@@ -1,3 +1,18 @@
 @import '~@primer/css/dist/base.css';
 @import '~@primer/css/dist/markdown.css';
 @import "~@culling/remark-loader/src/theme.scss";
+
+.markdown-body{
+  h1,h2,h3,h4{
+    &:hover{
+      .anchor-point{
+        visibility: visible;
+      }
+    }
+    .anchor-point{
+      visibility: hidden;
+      font-size: 18px;
+      margin-right: 5px;
+    }
+  }
+}

@@ -1,1 +1,2 @@
-export { default as routes }  from './routes';
+export { default as routes }  from './culling-routes';
+export * from './components';

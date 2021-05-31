@@ -45,7 +45,7 @@ const hasJsxRuntime = (() => {
     return false;
   }
 })();
-export default () => {
+const config = () => {
   const isProduction = environments.NODE_ENV === 'production';
   return {
     entry: paths.entryPath,
@@ -150,7 +150,7 @@ export default () => {
     plugins: [
       new ModuleFederationPlugin(moduleFederationPlugin),
       new HtmlWebpackPlugin({
-        template: paths.templatePath,
+        template: resolve(paths.publicDir, './index.html'),
         inject: true,
       }),
       isProduction && new CleanWebpackPlugin(),
@@ -160,11 +160,11 @@ export default () => {
           return previous;
         }, {}),
       }),
-      new InterpolateHtmlPlugin(HtmlWebpackPlugin, Object.assign({}, environments, { PUBLIC_URL: environments.PUBLIC_URL.replace(/\/$/, '') })),
+      new InterpolateHtmlPlugin(HtmlWebpackPlugin, Object.assign({}, environments)),
       new CopyPlugin({
         patterns: [
           {
-            from: 'public',
+            from: paths.publicDir,
             filter(file) {
               return !/index\.html$/.test(file);
             },
@@ -201,3 +201,5 @@ export default () => {
     ].filter(Boolean),
   };
 };
+
+export default config;

@@ -4,7 +4,7 @@ const { resolve } = require('path');
 const childProgress = require('child_process');
 
 fs.removeSync(resolve(__dirname, './lib'));
-glob(resolve(__dirname, './src/**/{*.scss,*.css}'), (err, files) => {
+glob(resolve(__dirname, './src/**/*.!(ts|tsx)'), (err, files) => {
   if (err) {
     throw err;
   }

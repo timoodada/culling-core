@@ -1,13 +1,11 @@
+import { Node } from 'unist-util-visit';
 import { Front } from './components';
-import { Node as HNode } from 'hast-util-to-html/lib/types';
 
 interface Route {
   exact: boolean;
   path: string;
-  data: {
-    hast: HNode | HNode[];
-    front: Front;
-  };
+  front: Front;
+  data: () => Promise<Node>;
 }
 const routes: Route[] = [];
 export default routes;
