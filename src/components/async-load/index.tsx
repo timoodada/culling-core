@@ -28,60 +28,50 @@ export function loadScript(url: string): Promise<void> {
   return ret;
 }
 
-export async function loadComponent(scope: string, module: string) {
-  // Initializes the share scope. This fills it with known provided modules from this build and all remotes
-  // eslint-disable-next-line no-undef
-  await __webpack_init_sharing__('default');
-
+export async function loadModule(url: string, scope: string, module: string) {
+  await loadScript(url);
   const container = (window as any)[scope]; // or get the container somewhere else
-  // Initialize the container, it may provide shared modules
-  // eslint-disable-next-line no-undef
-  await container.init(__webpack_share_scopes__.default);
-  const factory = await (window as any)[scope].get(module);
-  return factory();
+  return await resolveModule(container, module);
 }
 
-export function loadModule(scope: string, module: string) {
-  return loadComponent(scope, module).then(res => {
-    return Promise.resolve(res.default);
+export function loadAMDModule(url: string[]) {
+  return new Promise((resolve, reject) => {
+    (window as any).require(url, (container: any) => {
+      resolveModule(container, './App').then(resolve).catch(reject);
+    });
   });
 }
 
-interface AsyncErrorProps {
-  scope: string;
-  module: string;
+export async function resolveModule(container: any, module: string) {
+  // Initializes the share scope. This fills it with known provided modules from this build and all remotes
+  // eslint-disable-next-line no-undef
+  await __webpack_init_sharing__('default');
+  // Initialize the container, it may provide shared modules
+  // eslint-disable-next-line no-undef
+  await container.init(__webpack_share_scopes__.default);
+  const factory = await container.get(module);
+  return factory();
 }
-const Error: FC<AsyncErrorProps> = (props) => {
-  const { scope, module } = props;
+
+const Error: FC = () => {
   return (
-    <>{scope} {module} loading failed</>
+    <>module load failed</>
   );
 };
 
 interface AsyncComponentProps {
-  remote?: string;
-  scope: string;
-  module: string;
+  module: Promise<any>;
   [prop: string]: any;
 }
 export const AsyncComponent: FC<AsyncComponentProps> = (props) => {
-  const { remote, scope, module } = props;
+  const { module } = props;
   const C = useMemo(() => {
-    if (typeof remote === 'undefined') {
-      return lazy(() => {
-        return loadComponent(scope, module).catch(() => {
-          return Promise.resolve({ default: Error });
-        });
-      });
-    }
     return lazy(() => {
-      return loadScript(remote as string).then(() => {
-        return loadComponent(scope, module);
-      }).catch(() => {
+      return module.catch(() => {
         return Promise.resolve({ default: Error });
       });
     });
-  }, [remote, scope, module]);
+  }, [module]);
 
   return (
     <Suspense fallback={'loading...'}>

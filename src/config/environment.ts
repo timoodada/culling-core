@@ -1,6 +1,10 @@
 import { tryRead } from './culling';
 
-export function argvParser() {
+export interface Environments {
+  [prop: string]: string;
+}
+
+export function argvParser(): Environments {
   const argv = process.argv.reduce<any[]>((previous, current) => {
     if (current.indexOf('--') === 0) {
       previous.push({ name: current.replace(/^--/, ''), value: [] });
@@ -10,14 +14,14 @@ export function argvParser() {
     }
     return previous;
   }, []);
-  const ret: any = {};
+  const ret: Environments = {};
   argv.forEach(v => {
-    ret[v.name] = (v.value && v.value[v.value.length - 1]) || null;
+    ret[v.name] = (v.value && v.value[v.value.length - 1]) || '';
   });
   return ret;
 }
 
-function loadEnv() {
+function loadEnv(): Environments {
   const argv = argvParser();
   const NODE_ENV = argv.mode === 'production' ?
     'production' :
@@ -25,9 +29,9 @@ function loadEnv() {
   return {
     PUBLIC_URL: '/',
     NODE_ENV,
-    TIMESTAMP: Date.now(),
-    PORT: argv.port || 3000,
+    TIMESTAMP: String(Date.now()),
+    PORT: argv.port || '3000',
   };
 }
 
-export const environments = Object.assign({}, loadEnv(), tryRead('environments', {}));
+export const environments = Object.assign({}, loadEnv(), tryRead<Environments>('environments', {}));

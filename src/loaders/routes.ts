@@ -3,7 +3,7 @@ import glob from 'glob';
 import { relative, resolve } from 'path';
 import stringifyObject from 'stringify-object';
 
-const markdownDir = tryRead('markdown', null);
+const markdownDir = tryRead('markdown', '');
 
 export default async function loader(resource: string) {
   // @ts-ignore

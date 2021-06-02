@@ -7,6 +7,7 @@ import express from 'express';
 import { environments } from './config/environment';
 import paths from './config/path';
 import { resolve } from 'path';
+import { tryRead } from './config/culling';
 
 const webpackConfig = makeConfig();
 
@@ -26,6 +27,10 @@ if (environments.NODE_ENV === 'production') {
 } else {
   const compiler = webpack(webpackConfig as any);
   const app = express();
+  const proxy = tryRead('proxy', null);
+  if (proxy) {
+    app.use(proxy);
+  }
   app.use(
     webpackDevMiddleware(compiler,  {
       publicPath: environments.PUBLIC_URL,

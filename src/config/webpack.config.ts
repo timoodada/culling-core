@@ -7,7 +7,7 @@ import InterpolateHtmlPlugin from 'react-dev-utils/InterpolateHtmlPlugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import paths from './path';
-import { environments } from './environment';
+import { environments, Environments } from './environment';
 import { tryRead } from './culling';
 
 const { ModuleFederationPlugin } = container;
@@ -20,6 +20,9 @@ const customAlias = tryRead('alias');
       filename: 'appEntry.js',
       remotes: {
         app2: 'app2@http://localhost/app2Entry.js',
+      },
+      library: {
+        type: 'umd',
       },
       exposes: {
         './App': './src/App.tsx',
@@ -155,7 +158,7 @@ const config = () => {
       }),
       isProduction && new CleanWebpackPlugin(),
       new DefinePlugin({
-        'process.env': Object.keys(environments).reduce<any>((previous, key) => {
+        'process.env': Object.keys(environments).reduce<Environments>((previous, key) => {
           previous[key] = JSON.stringify(environments[key]);
           return previous;
         }, {}),
