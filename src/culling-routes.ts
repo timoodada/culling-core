@@ -1,11 +1,4 @@
-import { Node } from 'unist-util-visit';
-import { Front } from './components';
+import { CullingRoute } from './models';
 
-interface Route {
-  exact: boolean;
-  path: string;
-  front: Front;
-  data: () => Promise<Node>;
-}
-const routes: Route[] = [];
+const routes: CullingRoute[] = [];
 export default routes;

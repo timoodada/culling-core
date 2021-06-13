@@ -29,6 +29,21 @@ export function combineClassNames(...args: string[]) {
   });
   return classNames.join(' ');
 }
+interface ClassMap {
+  [key: string]: boolean;
+}
+export function classNames(params: string | ClassMap, map?: ClassMap) {
+  let names = '';
+  if (typeof params === 'string') {
+    names = params;
+  } else {
+    names = combineClassNames(...Object.keys(params).filter(k => params[k]));
+  }
+  if (map) {
+    names = combineClassNames(names, ...Object.keys(map).filter(k => map[k]));
+  }
+  return names;
+}
 export function queryParse(val: any) {
   if (typeof val === 'string') {
     if (val.indexOf('?') === 0) {

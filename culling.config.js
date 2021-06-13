@@ -8,6 +8,9 @@ module.exports = {
   markdown: resolve(__dirname, './example/content'),
   moduleFederationPlugin: {
     name: 'test',
+    exposes: {
+      './App': './example/shared',
+    },
     shared: {
       'react': { requiredVersion: '^17.0.2' },
       'react-dom': { requiredVersion: '^17.0.2' },

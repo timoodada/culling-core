@@ -151,7 +151,15 @@ const config = () => {
       ],
     },
     plugins: [
-      new ModuleFederationPlugin(moduleFederationPlugin),
+      new ModuleFederationPlugin(Object.assign({
+        name: 'App',
+        filename: 'remoteEntry.js',
+        library: {
+          name: 'remoteJsonpCallback',
+          type: 'jsonp',
+        },
+        remotes: {},
+      }, moduleFederationPlugin)),
       new HtmlWebpackPlugin({
         template: resolve(paths.publicDir, './index.html'),
         inject: true,

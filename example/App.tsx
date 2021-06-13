@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import { routes, MdWrapper, loadAMDModule } from '../lib';
+import { routes, MdWrapper, loadModule } from '../lib';
+
+loadModule('/api/modules', './App').then(res => {
+  console.log(res);
+});
 
 const App = () => {
   const location = useLocation();
   useEffect(() => {
-    loadAMDModule([`/api/applications?_=${Date.now()}`]).then(res => {
-      console.log(res);
-    });
+    //
   }, []);
   return (
     <>

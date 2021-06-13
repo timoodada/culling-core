@@ -1,3 +1,3 @@
-import { routes } from '../lib';
+import routes from '../lib/culling-routes';
 
 export default routes;
