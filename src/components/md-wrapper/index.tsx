@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { toHtml } from 'hast-util-to-html';
 import { visit, Node } from 'unist-util-visit';
 import { toString } from 'mdast-util-to-string';
+import { cloneDeep } from 'lodash';
 import './style.scss';
 
 export interface Front {
@@ -20,6 +21,7 @@ export const MdWrapper: FC<MdWrapperProps> = (props) => {
     if (typeof data === 'function') {
       setLoading(true);
       data().then(res => {
+        res = cloneDeep(res);
         visit(res, [(v) => {
           return v.type === 'element' && /^h\d+$/.test(v.tagName as string);
         }], (v) => {

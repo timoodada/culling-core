@@ -1,0 +1,26 @@
+.custom-layout{
+  header.main-header{
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 2px 8px #f0f1f2;
+    background: rgb(36, 41, 46);
+    color: #ffffff;
+    h1{
+      font-size: 18px;
+      padding: 10px;
+    }
+  }
+  .root-main-wrapper{
+    position: relative;
+    & > nav{
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 200px;
+    }
+    & > main{
+      padding-left: 200px;
+    }
+  }
+}
